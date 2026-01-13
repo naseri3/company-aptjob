@@ -5,6 +5,7 @@ body {
     width: 1280px;
     margin: 20px auto 0;
     background-color: transparent;
+	z-index: 10 !important;
 }
 #subPage h2 {
     font-size: 30px;
@@ -145,7 +146,7 @@ body {
     padding-right: 10px;
 }
 .main-btn {
-    background: #0070f3;
+    background: #0070f3 !important;
     color: #fff;
     width: 100px;
     font-weight: 700;
@@ -356,8 +357,14 @@ td.company {
 .company-page {
     max-width: 1280px;
 }
+.company-logo {
+	font-size:30px;
+	font-weight:700;
+}
 .company-logo img {
     max-height: 60px;
+	max-width: 250px;
+	
 }
 .company-banner img {
     width: 100%;
@@ -553,6 +560,14 @@ td.company {
   background-color: #777; /* 살짝 어두운 회색 유지 */
 }
 
+/* 위탁사 전체공고 data가 없을 시 */
+.empty-list-message {
+	text-align:center !important;
+	background-color:#fff;
+	font-size:16px;
+}
+
+
 /* personality.html CSS */
 .personality-banner {
 	background-color:#2D74B4;
@@ -642,6 +657,7 @@ td.company {
   border-bottom: 1px solid #ccc;
   padding: 10px 8px;
   text-align: center;
+  font-size: 18px;
   font-weight: 600;
 }
 .survey-service-table tbody td {
@@ -649,9 +665,9 @@ td.company {
   padding: 12px 8px;
   text-align: center;
 }
-.survey-service-table .col-check {
-  width: 40px;
-  text-align: center;
+.service-notice {
+	line-height: 1.5;
+	font-size: 15px;
 }
 
 /* 체크박스 크기 */
@@ -693,9 +709,13 @@ td.company {
   list-style: decimal;
   margin-left: 20px;
 }
-.terms-list ol li:last-child {
-  list-style: none;
-  margin-left: 0;
+.terms-list ol li ul>li {
+  margin-bottom: 5px;
+  list-style: disc;
+  margin-left: 20px;
+}
+.terms-list .style-none {
+	list-style: none;
 }
 .terms-privacy, .terms-third {
    margin-top:40px;
@@ -800,4 +820,8 @@ td.company {
 }
 .btn-submit:hover {
   background: #0B5ED7;
+}
+.btn-submit:disabled {
+  background-color: #AAAAAA;
+  cursor: not-allowed;
 }

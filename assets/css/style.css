@@ -56,13 +56,18 @@
   transition: transform 0.5s ease-in-out;
   padding: 0 50px;
 }
+
 .slider-track .card a {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  margin: 0;
-  padding: 0;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    white-space: normal !important;
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    height: 100%;
 }
+
 .slider-track,
 .slider-track * {
   user-select: none;      /* 텍스트 선택 방지 */
@@ -78,9 +83,8 @@
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 5px 5px rgba(157, 116, 116, 0.2);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block !important;
+  text-align: center;
   font-size: 14px;
   text-align: center;
   font-weight: 600;
@@ -94,15 +98,27 @@
   transition: all 0.3s ease;
 }
 .card .card-brand-logo {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;           /* 로고 영역 높이 통일 */
+    margin-bottom: 8px;
 }
-.card .card-brand-logo img {
-  width: 100px;
-  object-fit: contain;
-  margin-bottom: 10px;
-  display: block;
 
+.card .card-brand-logo img {
+    max-height: 30px;
+    width: 110px;
+    object-fit: contain;
 }
+
+.brand-name {
+    display: block;
+    white-space: normal !important;
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    text-align: center;
+}
+
 .slider-btn {
   position: absolute;
   top: 50%;
@@ -412,4 +428,80 @@ td.company {
 .notice-container a {
   color: #333;
   text-decoration: none;
+}
+
+
+
+/** index 인성검사, 직무평가 모달창 */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-box {
+  position: relative;
+  width: 450px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  font-weight:600;
+}
+.modal-close:hover {
+	color:#de0000;
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.modal-desc {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.modal-btns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn {
+  padding: 8px 18px;
+  font-size: 17px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary {
+  background: #3a6df0;
+  color: #fff;
+}
+.btn.primary:hover {
+  background: #0B5ED7;
+  color: #fff;
 }
