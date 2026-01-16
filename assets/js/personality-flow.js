@@ -1,114 +1,128 @@
 /*
-외부 인성검사 결과 API 미제공으로 인해 기획된 FLOW 기준으로 UI만 제어하는
-프론트엔드 임시 처리 로직입니다. (서버/DB/ASP Session과 무관)
+--------------------------------------------------
+ 인성검사 FE UI 제어 로직
+ (BE API 연동 전 / 기획 기준 임시 구현)
+--------------------------------------------------
+
+[상태 정의]
+NONE : 검사 이력 없음 / 결과 만료 → 응시하기
+ING  : 검사 진행 중 → 이어하기
+DONE : 검사 완료 → 완료 UI
+
+※ 실서비스에서는 상태 판단은 BE에서 내려주는 것이 정석
+   FE는 상태값에 따라 UI만 제어
+--------------------------------------------------
 */
 
+/* ==================================================
+   DOM ELEMENTS
+================================================== */
+const boxStart    = document.getElementById('box-start');     // #1 응시하기
+const boxContinue = document.getElementById('box-continue');  // #2 이어하기
+const boxComplete = document.getElementById('box-complete');  // #3 검사완료
 
-/* -------------------------
-   UI 상태값 (화면 제어용)
--------------------------- */
-// 0: 응시 전
-// 2: 부적합 → 재응시 안내
-// 3: 재응시 후 제출 가능
-let personalityStatus = 0;
+/* ==================================================
+   STATUS ENUM
+================================================== */
+const STATUS = {
+  NONE: 'NONE',   // 최초 응시 / 결과 없음
+  ING: 'ING',     // 검사 진행 중
+  DONE: 'DONE'    // 검사 완료
+};
 
+/* ==================================================
+   MOCK DATA (임시)
+   ※ 추후 BE 데이터로 교체
+================================================== */
+/*
+BE 연동 시 예시:
+{
+  hasExam: true,
+  isCompleted: false,
+  examDate: "2026-01-07"
+}
+*/
+const examInfo = {
+  hasExam: false,        // 검사 이력 존재 여부
+  isCompleted: false,    // 검사 완료 여부
+  examDate: '2026-01-07' // 검사 시작일 (YYYY-MM-DD)
+};
 
-/* -------------------------
-   DOM 요소
--------------------------- */
-const boxStart  = document.getElementById('box-start');   // 응시 버튼
-const boxSubmit = document.getElementById('box-submit');  // 제출 가능
-const boxRetry  = document.getElementById('box-retry');   // 재응시 안내
+/* ==================================================
+   STATUS DECISION LOGIC
+================================================== */
+function getPersonalityStatus(info) {
+  // 1. 검사 이력 없음 → 응시하기
+  if (!info.hasExam) {
+    return STATUS.NONE;
+  }
 
+  // 2. 검사 완료 → 완료 UI
+  if (info.isCompleted) {
+    return STATUS.DONE;
+  }
 
-/* -------------------------
-   UI 렌더링
--------------------------- */
-function renderBox() {
-  boxStart.style.display  = 'none';
-  boxSubmit.style.display = 'none';
-  boxRetry.style.display  = 'none';
+  // 3. 검사 진행 중 → 이어하기
+  return STATUS.ING;
+}
 
-  if (personalityStatus === 0) {
-    boxStart.style.display = 'block';
-  } else if (personalityStatus === 2) {
-    boxRetry.style.display = 'block';
-  } else if (personalityStatus === 3) {
-    boxSubmit.style.display = 'block';
+/* ==================================================
+   UI RENDERING
+================================================== */
+function renderPersonalityBox(status) {
+  if (!boxStart || !boxContinue || !boxComplete) return;
+
+  // 초기화 (모두 숨김)
+  boxStart.style.display    = 'none';
+  boxContinue.style.display = 'none';
+  boxComplete.style.display = 'none';
+
+  // 상태별 노출
+  switch (status) {
+    case STATUS.NONE:
+      boxStart.style.display = 'block';
+      break;
+
+    case STATUS.ING:
+      boxContinue.style.display = 'block';
+      break;
+
+    case STATUS.DONE:
+      boxComplete.style.display = 'block';
+      break;
   }
 }
 
+/* ==================================================
+   BUTTON ACTIONS
+================================================== */
 
-/* -------------------------
-   인성검사 최초 응시
--------------------------- */
+/**
+ * 인성검사 응시하기
+ * → 사전 안내 페이지
+ */
 function startTest() {
-  sessionStorage.setItem('returnToApply', 'Y');
-  sessionStorage.setItem('testType', 'start');
-
   window.open(
-    'https://www.aptjob.net/subpage/survey_pre_guide.html',
+    '/subpage/survey_pre_guide.html',
     '_blank'
   );
 }
 
-
-
-/* -------------------------
-   인성검사 재응시
--------------------------- */
-function retryTest() {
-  sessionStorage.setItem('returnToApply', 'Y');
-  sessionStorage.setItem('testType', 'retry');
-
+/**
+ * 인성검사 이어하기
+ * → 외부 검사 페이지
+ */
+function continueTest() {
   window.open(
     'https://etesys.select-test.co.kr/user/page/test',
     '_blank'
   );
-
-  alert('재응시가 완료되면 검사 창을 닫은 후 새로고침(F5) 해주세요.');
 }
 
-
-/* -------------------------
-   apply 페이지 로드 시
--------------------------- */
-window.onload = function () {
-  const returned = sessionStorage.getItem('returnToApply');
-  const testType = sessionStorage.getItem('testType');
-
-  if (returned === 'Y') {
-    if (testType === 'start') {
-		personalityStatus = 2;                   // 최초 응시 후 → 재응시 안내
-    } else if (testType === 'retry') {
-		personalityStatus = 3;                    // 재응시 후 → 제출 가능
-    }
-
-    sessionStorage.removeItem('returnToApply');
-    sessionStorage.removeItem('testType');
-  }
-
-  renderBox();
-};
-
-
-/* -------------------------
-   detail → apply 복귀 처리
---------------------------
-window.addEventListener('load', function () {
-  const shouldReturnToApply = sessionStorage.getItem('returnToApply');
-
-  if (shouldReturnToApply === 'Y') {
-    const params = new URLSearchParams(window.location.search);
-    const rSeq = params.get('R_SEQ');
-
-    let applyUrl = '/subpage/comfirm_apply_test.html';
-    if (rSeq) {
-      applyUrl += '?R_SEQ=' + rSeq;
-    }
-
-    sessionStorage.removeItem('returnToApply');
-    location.replace(applyUrl);
-  }
+/* ==================================================
+   INIT
+================================================== */
+document.addEventListener('DOMContentLoaded', function () {
+  const status = getPersonalityStatus(examInfo);
+  renderPersonalityBox(status);
 });
- */

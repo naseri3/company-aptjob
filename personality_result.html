@@ -1,0 +1,70 @@
+<!-- #include virtual = "/inc/sessin_top.asp" -->
+<!-- #include virtual = "/inc/inc_dbCon.asp" -->
+<!-- #include virtual = "/inc/function.asp" -->
+<!-- #include virtual = "/inc/head.asp" -->
+<!-- #include virtual = "/inc/company_check.asp" -->
+
+<link href="/css/test.css">
+
+<!-- co_page.css -->
+<body class="co-sub">
+	<div class="wrap popup mw800">
+    <div class="confirm__header">
+        <h1><span class="personality-result__name">홍길동</span> 아파트잡 인성검사 결과</h1>
+    </div>
+	<main class="contents">
+		<div class="personality-result">
+			<div class="personality-result__inner">
+				<div class="evaluation-summary">
+				  <ul class="evaluation-summary__list">
+
+					<!-- 종합평가 -->
+					<li class="evaluation-summary__item">
+					  <div class="evaluation-summary__icon evaluation-summary__icon--overall"></div>
+					  <strong class="evaluation-summary__value">추천</strong>
+					  <span class="evaluation-summary__label">종합평가</span>
+					</li>
+
+					<!-- 종합등급 -->
+					<li class="evaluation-summary__item">
+					  <div class="evaluation-summary__icon evaluation-summary__icon--grade"></div>
+					  <strong class="evaluation-summary__value">B</strong>
+					  <span class="evaluation-summary__label">종합등급</span>
+					</li>
+
+					<!-- 허위 응답성 -->
+					<li class="evaluation-summary__item">
+					  <div class="evaluation-summary__icon evaluation-summary__icon--trust"></div>
+					  <strong class="evaluation-summary__value">낮음</strong>
+					  <span class="evaluation-summary__label">허위 응답성</span>
+					</li>
+
+				  </ul>
+				</div>
+				
+				
+				<!-- 면접 추천 질문 -->
+				<div class="eval-interview-question">
+					<h3 class="eval-interview-question__title">면접 추천 질문</h3>
+					<div class="eval-interview-question__list">
+						<ul class="eval-interview-question__items">
+							<li>의견충돌 상황에서 적극적인 소통 노력을 통해 문제를 해결했던 경험이 있다면 말씀해 주시기 바랍니다.</li>
+							<li>혼자서 판단해야 하고 해결해야 하는 일이 있는 상황에 대해 대처를 잘하는 편인가?<br>
+							다른사람에게 의존하는 편인가?</li>
+							<li>의도하지 않게 타인으로부터 불만이나 오해를 받는 상황에서 상대방이 폭언이나<br>
+							심한 욕설을 한다면 어떻게 대처하겠습니까?</li>
+						</ul>
+					</div>
+					<div class="eval-interview-question__notice">
+						본 인성검사 및 결과 산출은 외부 전문 기관의 객관적인 솔루션을 통해 진행되었습니다.<br>
+						본 결과지는 응시자의 답변 로직을 분석한 자료로, <br>
+						개인의 인성을 절대적으로 보장하지 않으므로 채용을 위한 보조 지표로만 활용해 주시기 바랍니다.<br>
+						아파트잡은 결과 전달 외 채용 과정에는 관여하지 않으며, 최종 판단에 대한 책임은 채용 기업에 있습니다.<br>
+						본 자료의 무단 복제 및 배포를 금하며, 검토 후에는 관련 법령에 따라 반드시 파기해 주시기 바랍니다
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	</div>
+</body>

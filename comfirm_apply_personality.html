@@ -1,0 +1,310 @@
+<!-- #include virtual = "/inc/sessin_top.asp" -->
+<!-- #include virtual = "/inc/inc_dbCon.asp" -->
+<!-- #include virtual = "/inc/function.asp" -->
+<!-- #include virtual = "/inc/head.asp" -->
+
+<!-- #include virtual = "/inc/person_check_pop.asp" -->
+
+<%
+	'/제3자 동의 여부
+	'Call getMemCheck("popup")
+
+	query="select * from  job4you.dbo.Resume where R_IsDel=0 and  M_user_id='" & login_id &"'"
+	'query="select * from Resume where R_IsDel=0 and  M_user_id='999'"
+	query = query & " ORDER BY R_isBasic DESC, R_modify_date DESC  "
+
+
+ 	   Set Resume_content=Con.Execute(query)
+		If  Resume_content.BOF Or   Resume_content.EOF Then		
+
+			'go_self_close("이력서를 등록해주세요")
+			'Call go_self_location("이력서를 등록해주세요","/subpage/resume_write.html")
+			Call go_self_location("이력서를 등록해주세요","/subpage/mypage_main.html")
+
+			Response.end
+	
+		End if
+
+	    query="select *,convert(date,R_join_date2_2) as end_date from  job4you.dbo.Recruit where R_SEQ='" &  request("R_SEQ")& "' "&inc_recruit_paywc&" and  is_del is null"
+		Set Rs=Con.Execute(query)
+
+		query="select * from  job4you.dbo.Company where C_SEQ='" & Rs("R_user_id") &"'"
+		Set Rs2=Con.Execute(query)
+	
+		address_info=get_Company_address(Rs2("address_seq"))
+
+		query3="select top 1 * from  job4you.dbo.resume_join where Rj_m_user_id='"& login_id &"' and Rj_r_seq=" &   request("R_SEQ") &" and Rj_status <> '2' order by Rj_SEQ desc"
+		'Response.write query3
+		'Response.end
+		Set Rs3=Con.Execute(query3) 
+
+    	If not Rs3.BOF Or  not  Rs3.EOF Then 
+			go_self_close("이미 지원한 입사 공고 입니다")
+			Response.end
+		End If
+		
+		end_date = REPLACE(Rs("end_date"),"-","")
+		cur_date = Year(DATE)&funZro(Month(DATE))&funZro(Day(DATE))
+		
+		'Response.write "R_status = "&Rs("R_status")&"<br>"
+		'Response.write "end_date = "&end_date&"<br>"
+		'Response.write "cur_date = "&cur_date&"<br>"
+		'Response.end
+
+		If Rs("R_status") <> "1" Or end_date < cur_date Then 
+			'Response.write "종료"
+			go_self_close("종료된 공고 입니다.")
+			Response.End
+		End if
+		
+%>
+
+
+<body class="sub">
+	<script>
+		
+		function resume_join()
+		{
+				if(confirm("지원하시겠습니까?"))
+				{	
+						document.resume_join_form.submit()
+				}
+		}
+
+		function resume_check(form)
+		{
+				//if($("#i_job").html()=='직무목록'){
+				if($("#i_job_temp").val() == ""){
+					alert("직무목록을 선택해주세요");
+					return false;
+
+				}
+				//이력서 선택
+				if($('input[name=R_seq]:checked').val() == ""){
+					alert("지원이력서를 선택해주세요");
+					return false;
+				}
+				
+				// 입사지원 동의 체크
+				var agreeApply = document.getElementById('agreeApply');
+				if (!agreeApply || !agreeApply.checked) {
+					alert("입사 서류 제출 및 입사지원에 동의해 주세요.");
+					return false;
+				}
+				
+				form.submit();
+		}
+        function I_job_insert(val)
+		{
+			$("#i_job_temp").val(val);
+		}
+	</script>
+
+
+	<form method='POST' action='process_action.asp' name='resume_join_form' onsubmit='return resume_check(this)'>
+	<input type='hidden' name='process_action' value='resume_join'>
+	<input type='hidden' name='i_job' id='i_job_temp'>
+	<input type='hidden' name='Rj_r_seq' value='<%=request("R_SEQ")%>'>
+	<input type='hidden' name='i_company_id' value='<%=Rs("R_user_id")%>'>
+
+   <main class="contents">
+      <div class="wrap popup apply-wrap">
+         <!-- 지원 확인 div -->
+         <div class="confirm-apply v2-apply">
+            <div class="confirm-apply__wrap v2-apply__wrap">
+               <div class="confirm-apply__header">
+                  <h2 class="confirm-apply__title"><%=address_info(1)%></h2>
+               </div>
+               <div class="confirm-apply__content">
+                  <h3 class="recruit__title apply-confirm__heading"><%=Rs("R_title")%></h3>
+                  <div class="recruit__job-select">
+                     <div class="select-box">
+                        <p class="select-box__label" id='i_job'>직무목록</p>
+                        <ul class="select-box__ul">
+                         
+						<%
+						  query="select * from  job4you.dbo.Recruit_job where R_parent='" & request("R_SEQ") &"'"
+						  Set Recruit_job=Con.Execute(query)
+
+						  If not  Recruit_job.BOF Or  not  Recruit_job.EOF Then 
+					    	while not(Recruit_job.EOF)
+							%>
+
+						   <li onClick='javascript:I_job_insert("<%=Recruit_job("Rj_SEQ")%>")'><%=get_Common_title(Recruit_job("R_job3"))%></li>
+                           
+						<%
+							Recruit_job.MoveNext 
+							Wend
+						End if
+						%>
+						
+						</ul>
+                     </div>
+
+					<%
+
+						  'query="select * from Resume where R_IsDel=0 and  M_user_id='" & login_id &"'"
+					 	  'Set Resume_content=Con.Execute(query)
+
+					%>
+
+			
+                     <div class="resume-info v2-resume">
+                        <p class="resume__title v2-resume__title">지원이력서</p>
+                        <div class="resume__box v2-resume__box">
+						<%
+							If not Resume_content.BOF Or not Resume_content.EOF Then 
+							Do Until Resume_content.EOF
+
+						%>                          
+						<div class="resume__etc v2-resume__row">
+						   <p class="resume__text">
+						   <label class="select__item"><input type="radio" name="R_seq" id="R_seq" class="checkbox--basic checkbox--circle" value="<%=Resume_content("R_seq")%>" <%= IIF(Resume_content("R_isBasic") = "1", "checked", "") %>>
+						   <%=Resume_content("R_title")%><% If Resume_content("R_isBasic") = "1" Then %><span class="mypage-info__title-status">기본</span><% End If %>
+						   </label>
+						   </p>
+						</div>
+						   
+                           <div class="resume__etc resume__title resume-meta">
+                              <p class=""><span class="mr15 resume-meta-label">연락처</span><span class="etc-contact resume-contact"><%=Resume_content("R_cel")%></span></p>
+                              <button type="button" class="resume-edit-btn" onclick="popupResume(<%=Resume_content("R_seq")%>)">수정</button>
+                           </div>
+
+							<%
+								order_num = order_num - 1
+								Resume_content.MoveNext
+								Loop
+								End If 
+							%>
+
+                        </div>
+                     </div>
+					 <!--
+                     <div class="recruit__info">
+                        <!- <p>[지원하기] 버튼을 클릭시 개인정보 열람 동의로 간주 됩니다.</p>
+                        <p>제출서류는 90일동안 지원기업에게 제공 됩니다.</p>
+                        <p>동의하지 않을 경우 입사지원이 불가능합니다.</p> ->
+						
+						<p>제출서류는 지원한 관리소와 해당 관리소의 위탁관리본사에 제공되며, 제공 기간은 90일입니다.</p>
+						<p>제출에 동의할 경우에만 [지원하기] 버튼을 클릭해 주세요.</p>
+						<p>동의하지 않을 경우 입사지원이 불가능합니다.</p>
+						<p>※ 본 채용공고는 #본사명의 요청에 따라 #인성검사, #직무역량검사의 제출이 필수입니다.</p>
+						<p class="exam-refresh-notice">인성검사 응시가 완료되면 검사 창을 닫은 후 이 화면을 새로고침(F5) 해주세요.</p>
+                     </div>
+					 -->
+					<!-- 인성검사 박스 UI 영역 -->
+						<div class="resume-info v2-resume">
+						  <p class="resume__title v2-resume__title">인성검사</p>
+						  <div class="resume__box resume__box--personality">
+							<div class="resume__etc">
+							  <!-- #1 : 응시하기 (값없음 / 검사결과만료) -->
+							 <div id="box-start">
+							  <p class="exam-desc">
+								<span class="exam-status-warning">유효한 인성검사 결과가 없습니다.</span><br>
+								<span class="exam-action-guide">
+								  인성검사 필수 공고에 지원하기 위해서 인성검사에 응시해주시기 바랍니다.
+								</span>
+							  </p>
+
+							  <div class="resume-test-action">
+								<button type="button" class="btn_typeD d-navy" onclick="startTest()">
+								  인성검사 응시하기
+								</button>
+							  </div>
+							</div>
+							  <!-- #2 : 이어하기 (검사중) -->
+							  <div id="box-continue">
+								<p class="exam-desc">
+								인성검사가 진행중입니다. <span class="exam-start-date">(최초 응시일: 2026-01-07)</span><br>
+								  <span class="exam-deadline-date">2026-02-13</span> 까지 이어서 응시하실 수 있습니다.
+								</p>
+								<p class="exam-notice">
+								  ※ 채용공고의 마감 기한이 초과하면 인성검사를 <br>
+								  <span style="color:#fff;">※ </span>완료하더라도 지원서 제출이 불가합니다.<br>
+								  <span style="color:#fff;">※ </span>반드시 공고 마감 전까지 응시를 완료해주시기 바랍니다.
+								</p>
+								<div class="resume-test-action">
+								  <button type="button" class="btn_typeD d-navy" onclick="continueTest()">
+									인성검사 이어하기
+								  </button>
+								</div>
+							  </div>
+
+							  <!-- #3 : 검사완료 -->
+							  <div id="box-complete">
+								<p class="personality-status-text">
+								  인성검사가 완료되었습니다.</p>
+								<label class="personality-test-meta">
+								<span class="personality-status-title">[지원 인성검사]</span><br>
+								  인성검사 (2026-01-14 오후 10:41:32)
+								</label>
+
+							  </div>
+
+							</div>
+						  </div>
+						</div>
+						
+						
+						<p class="exam-refresh-notice">
+						  응시가 완료되면 이 화면을 새로고침(F5)해주세요
+						</p>
+
+						<div class="apply-consent-desc">
+						  제출서류는 지원한 관리소와 해당 관리소의 위탁관리본사에 제공되며, 제공 기간은 90일입니다. 제출에 거부할 수 있으나, 제출 거부 시 입사지원이 불가능합니다.
+						</div>
+
+						<div class="apply-consent-check">
+						  <input type="checkbox" id="agreeApply" class="apply-consent-input">
+						  <label for="agreeApply" class="apply-consent-label">
+							입사 서류 제출 및 입사지원에 동의
+						  </label>
+						</div>
+
+					  </div>
+					</div>
+					
+                  </div>
+                  <div class="button__wrap">
+
+					<%
+					 
+							Sql = "Select * from  job4you.dbo.resume_join where Rj_r_seq='"& request("R_SEQ")&"' and Rj_m_user_id='"& login_id&"'"
+							'Response.write sql
+							Set Rs_check = Con.Execute(Sql)
+							
+						    If  Rs_check.BOF Or   Rs_check.EOF Then 
+
+					 %>
+		                     <button type="submit" class="btn_typeD d-navy" >지원하기</button>
+                  
+					<%else%>
+							<%If Rs_check("Rj_status") = "2" Then%>
+								<button type="submit" class="btn_typeD d-navy" >지원하기</button>
+							<%else%>
+								<script>
+								function resume_join_cancel_check()
+								{
+									alert("지원완료된 공고입니다!")
+									self.close();
+								}
+								</script>
+
+								  <button type="button" class="btn_typeD d-navy" onClick='javascript:resume_join_cancel_check()'>지원하기</button>
+							<%End if%>
+
+					<%End if%>
+				  
+				  </div>
+               </div>
+            </div>
+         </div>
+        
+
+      </div>
+   </main>
+   </form>
+
+
+	<script src="/js/personality-flow.js"></script>
+</body>

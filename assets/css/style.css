@@ -432,22 +432,27 @@ td.company {
 
 
 
-/** index 인성검사, 직무평가 모달창 */
-.modal {
+/* =====================================================
+   APTJOB 검사 이어하기 모달 (전용)
+===================================================== */
+
+.aptjob-test-continue-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
 }
 
-.hidden {
+.aptjob-test-continue-modal.is-hidden {
   display: none;
+  pointer-events: none; /* 뒤 UI 클릭 완전 허용 */
 }
 
-.modal-box {
+/* 모달 박스 */
+.aptjob-test-continue-modal__box {
   position: relative;
   width: 450px;
   background: #fff;
@@ -456,7 +461,8 @@ td.company {
   text-align: center;
 }
 
-.modal-close {
+/* 닫기 버튼 */
+.aptjob-test-continue-modal__close {
   position: absolute;
   right: 10px;
   top: 5px;
@@ -464,44 +470,46 @@ td.company {
   border: none;
   font-size: 30px;
   cursor: pointer;
-  font-weight:600;
-}
-.modal-close:hover {
-	color:#de0000;
+  font-weight: 600;
 }
 
-.modal-title {
+.aptjob-test-continue-modal__close:hover {
+  color: #de0000;
+}
+
+/* 타이틀 */
+.aptjob-test-continue-modal__title {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 15px;
 }
 
-.modal-desc {
+/* 설명 문구 */
+.aptjob-test-continue-modal__desc {
   font-size: 16px;
   color: #555;
   margin-bottom: 25px;
 }
 
-.modal-btns {
+/* 버튼 영역 */
+.aptjob-test-continue-modal__actions {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
 }
 
-.btn {
+/* 이어하기 버튼 (전용) */
+.aptjob-test-continue-modal__btn {
   padding: 8px 18px;
   font-size: 17px;
   border-radius: 4px;
   cursor: pointer;
   border: none;
-}
-
-.btn.primary {
   background: #3a6df0;
   color: #fff;
 }
-.btn.primary:hover {
-  background: #0B5ED7;
-  color: #fff;
+
+.aptjob-test-continue-modal__btn:hover {
+  background: #0b5ed7;
 }

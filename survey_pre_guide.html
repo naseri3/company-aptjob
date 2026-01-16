@@ -1,0 +1,227 @@
+<!-- #include virtual = "/inc/sessin_top.asp" -->
+<!-- #include virtual = "/inc/inc_dbCon.asp" -->
+<!-- #include virtual = "/inc/function.asp" -->
+<!-- #include virtual = "/inc/renew_head.asp" -->
+
+	<!-- ✅ Bootstrap CSS -->
+
+  <body>
+    <!-- header -->
+    <header id="headerWrap">
+		<!-- #include virtual = "/inc/renew_header.asp" -->
+	</header>
+
+    <main>
+		<section id="subPage">
+			<h2>아파트잡 인성검사 안내</h2>
+			<!-- 서비스 선택 -->
+			<div id="surveyServiceSection" class="survey-service" />
+				<table class="survey-service-table">
+					<thead>
+						<tr>
+							<th>검사 문항수 : 200문항</th>
+							<th>제한시간 : 60분</th>
+						</tr>
+					</thead>
+					<tbody>
+					  <tr class="service-item">
+						<td class="service-notice" colspan="2">
+						  본 검사는 #본사명의 요청으로 진행되는 필수 검사입니다. <br/>
+						  귀하의 소중한 역량을 정확히 확인하기 위한 과정이며,응시 비용은 #본사명에서 지원합니다.
+						</td>
+					  </tr>
+					</tbody>
+				</table>
+			 
+				<!-- 인성검사 응시 전 안내사항 -->
+				<div id="surveyGuideSection" class="terms-section terms-guide">
+				  <h5 class="terms-title">인성검사 응시 전 안내사항</h5>
+					<div class="terms-list">
+					  <ul>
+						<li>본 검사는 개인의 성격 특성을 파악하기 위해 실시하는 것이며, 별도의 정답이 없는 검사입니다.</li>
+						<li>제시된 문항을 읽고 해당 문항이 평소 자신의 모습에 얼마나 부합하는지 응답해 주시면 됩니다.</li>
+						<li>본 검사 결과는 별도로 본인에게 공개되지 않으며, ‘검사 결과 제출 필수’ 공고에 지원할 시 별도의 첨부 과정 없이 해당 기업에 자동으로 제출됩니다.</li>
+						<li>검사 중단 : 검사 중 최종 ‘제출’ 버튼을 누르기 전, 새로고침/브라우저 종료/네트워크 단절 등으로 중단된 경우를 의미합니다. <br/>
+						이 경우 다시 접속하여 응시하기를 클릭하면 기존 응답 내용 및 잔여 제한시간이 유지된 상태로 이어서 응시가 가능합니다.</li>
+						<li>검사 완료 : ① 응시자가 직접 ‘제출’ 버튼을 누르거나 ② 제한시간이 초과되면 즉시 ‘검사 완료’ 처리됩니다. <br/>
+						검사 완료 후에는 답안 수정 및 재응시가 원칙적으로 불가합니다. (단, 운영 정책에 따라 별도의 업데이트 기회가 부여될 수 있습니다.)</li>
+					  </ul>
+					</div>
+				</div>
+
+
+				<!-- [필수] 인적성검사 운영 정책 -->
+				<div id="privacyCollectSection" class="terms-section terms-privacy">
+				  <h5 class="terms-title">[필수] 인적성검사 운영 정책</h5>
+				<div class="terms-list">
+					<ol>
+						<li>검사 운영 및 결과 활용 정책
+							<ul>
+								<li>인성검사는 외부 전문기관(㈜한국직무능력평가연구소)의 표준화된 평가 기준 및 로직에 따라 실시됩니다.</li>
+								<li>직무역량검사는 공동주택 교육 전문기관(이테시스)이 자체 출제하고 검증한 직무 역량 검사 표준을 따릅니다.</li>
+								<li>결과 열람 제한 : 검사 결과는 채용 기업의 심사 참고 자료로만 활용되며, 응시자 개인에게는 세부 점수 및 리포트를 제공하지 않습니다. <br/>
+								결과에 대한 별도의 해석 요청이나 이의 제기는 접수되지 않습니다.</li>
+								<li>유효기간 및 재사용 : 결과의 효력 및 자동 첨부 가능 기간은 완료일로부터 1년입니다. 유효기간 내 동일 검사 항목이 포함된 타 공고 지원 시 기존 결과를 재사용할 수 있습니다.</li>
+								<li>결과의 귀속 : 인성검사 결과는 개인 계정에 귀속되어 입사 지원을 취소해도 결과 보유 상태는 유지됩니다. 이후 다른 공고 지원 시 해당 결과를 재사용할 수 있습니다.</li>
+								<li>책임의 제한 : 아파트잡은검사 시스템을 통한 객관적 데이터만을 기업에 전달하며, 최종 채용 판정(합격/불합격)에는 일절 관여하지 않습니다.</li>
+							</ul>
+						</li>
+						<li>검사 응시 진행
+							<ul>
+								<li>검사 시작 : 검사 운영 정책 및 민감정보 제공, 개인정보 제3자 제공에 동의한 후 '검사 시작'을 클릭한 경우를 의미합니다.</li>
+								<li>검사 중단 : 검사 중 최종 ‘제출’ 버튼을 누르기 전, 새로고침/브라우저 종료/네트워크 단절 등으로 중단된 경우를 의미합니다. <br/>
+								이 경우 다시 접속하여 응시하기를 클릭하면 기존 응답 내용 및 잔여 제한시간이 유지된 상태로 이어서 응시가 가능합니다.</li>
+								<li>검사 완료 : ① 응시자가 직접 ‘제출’ 버튼을 누르거나 ② 제한시간이 초과되면 즉시 ‘검사 완료’ 처리됩니다. <br/>
+								검사 완료 후에는 답안 수정 및 재응시가 원칙적으로 불가합니다. (단, 운영 정책에 따라 별도의 업데이트 기회가 부여될 수 있습니다.)</li>
+							</ul>
+						</li>
+						<li>고객센터</li>
+						<li>서비스 이용 방법 및 시스템 오류 관련 문의: 아파트잡 고객센터 (070-4616-0890, 평일 10:00~17:00 / 점심시간 12:00~13:00)</li>
+					</ol>
+				</div>
+
+				  <div class="agree-item">
+					<input type="checkbox" id="agreePrivacy" required>
+					<label for="agreePrivacy">인적성검사 운영 정책에 동의</label>
+				  </div>
+				</div>
+
+
+				<!-- [필수] 민감정보 수집 및 이용 동의 -->
+				<div id="privacyShareSection" class="terms-section terms-sensitive">
+				  <h5 class="terms-title">[필수] 민감정보 수집 및 이용 동의</h5>
+
+				<div class="terms-list">
+					<ol>
+						<li>수집 및 이용 목적 : 구직자의 개인 특성 분석 및 입사지원시 참고자료로 활용</li>
+						<li>수집하는 민감정보 항목 : 인성검사 결과, 직무역량검사 결과</li>
+						<li>민감정보 보유 및 이용 기간: 검사 완료일로부터 1년 후 파기</li>
+						<li class="style-none">※ 동의를 거부할 수 있으며, 다만 이 경우에는 인성검사, 직무역량검사 서비스 이용이 불가합니다.</li>
+					</ol>
+				</div>
+
+				  <div class="agree-item">
+					<input type="checkbox" id="agreeSensitive" required>
+					<label for="agreeSensitive">민감정보 수집 및 이용에 동의</label>
+				  </div>
+				</div>
+				
+				<!-- [필수] 개인정보 제3자 제공에 대한 동의 -->
+				<div id="privacyShareSection" class="terms-section terms-third">
+				  <h5 class="terms-title">[필수] 개인정보 제3자 제공에 대한 동의</h5>
+
+				<div class="terms-list">
+					<ol>
+						<li>1. 제공받는 자 : 
+							<ul>
+								<li>외부 전문 검사기관 : (주)한국직무능력평가연구소(인성검사)</li>
+								<li>채용 기업 : 인적성검사 결과 제출이 필수인 채용 공고로 등록하고, 개인이 입사 지원한 기업회원</li>
+							</ul>
+						</li>
+						<li>제공 항목 : 성명, 수험번호(검사 식별 번호), 인성검사 결과, 직무역량검사 결과</li>
+						<li>제공 목적 :
+							<ul>
+								<li>외부 전문 검사기관: 검사 시스템 접속 및 검사 실시, 결과 리포트 생성</li>
+								<li>채용 기업 : 공고 지원시 보유 중인 검사 결과를 전송 함. 구직자의 개인 특성 분석 및 채용 심사 참고자료로 활용</li>
+							</ul>
+						</li>
+						<li>보유 및 이용 기간 :
+							<ul>
+								<li>검사기관 : 검사 수행 및 검사 결과 산출 후 1년까지</li>
+								<li>기업회원 : 입사 지원 혹은 면접 제안 동의 후 90일. 인적성검사 유효기간 만료일까지</li>
+								<li class="style-none">※ 동의를 거부할 수 있으며, 다만 이 경우에는 인성검사, 직무역량검사 서비스 이용이 제한됩니다.</li>
+							</ul>
+						</li>
+					</ol>
+				</div>
+
+				  <div class="agree-item">
+					<input type="checkbox" id="agreeThird" required>
+					<label for="agreeThird">개인정보 제3자 제공에 대한 동의</label>
+				  </div>
+				</div>
+
+
+				<!-- 전체 동의 -->
+				<div class="agree-all">
+				  <input type="checkbox" id="agreeAll">
+				  <label for="agreeAll">전체 동의</label>
+				</div>
+
+				<button type="button" class="btn-submit" id="btnStartSurvey" onclick="startSurvey()" disabled>
+				  검사 시작
+				</button>
+
+
+				</div>
+			</div>
+		</section>
+	</main>
+	
+	<footer id="footer" class="site-footer">
+		<!-- #include virtual = "/inc/renew_footer.asp" -->	
+	</footer>
+	
+	<!-- 전체 동의 -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		  const agreeAll = document.getElementById("agreeAll");
+
+		  const agreePrivacy = document.getElementById("agreePrivacy");
+		  const agreeSensitive = document.getElementById("agreeSensitive");
+		  const agreeThird = document.getElementById("agreeThird");
+
+		  const btnStartSurvey = document.getElementById("btnStartSurvey");
+
+		  const requiredAgrees = [
+			agreePrivacy,
+			agreeSensitive,
+			agreeThird
+		  ];
+
+		  // 버튼 활성화 여부 체크 함수
+		  function updateButtonState() {
+			const isAllChecked = requiredAgrees.every(cb => cb.checked);
+			btnStartSurvey.disabled = !isAllChecked;
+		  }
+
+		  // 전체 동의 클릭
+		  agreeAll.addEventListener("change", function () {
+			requiredAgrees.forEach(cb => {
+			  cb.checked = agreeAll.checked;
+			});
+			updateButtonState();
+		  });
+
+		  // 개별 동의 클릭
+		  requiredAgrees.forEach(cb => {
+			cb.addEventListener("change", function () {
+			  agreeAll.checked = requiredAgrees.every(item => item.checked);
+			  updateButtonState();
+			});
+		  });
+		});
+	</script>
+
+	
+	<!-- 검사 신청 페이지 이동 -->
+	<script>
+		function startSurvey() {
+		  const params = new URLSearchParams(window.location.search);
+		  const rSeq = params.get('R_SEQ');
+
+		  // 1️. 실제 검사 페이지
+		  window.open(
+			'https://etesys.select-test.co.kr/user/page/test',
+			'_blank'
+		  );
+
+		  // 2️. 안내 페이지 역할 종료
+		  window.close();
+		}
+	</script>
+
+
+
+</body>
+</html>

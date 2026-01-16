@@ -1,70 +1,105 @@
 
-		/**
-		 * BE에서 내려줬다고 가정하는 값
-		 * 실제 연동 시 이 값만 교체
-		 */
-		 console.log('index_test_modal.js 로드됨');
+/**
+ * BE에서 내려줬다고 가정하는 값
+ * 실제 연동 시 이 값만 교체
+ */
+console.log('index_test_modal.js 로드됨');
 
-		const userInfo = {
-			isLogin: true,
-			memberType: 'PERSONAL',
-			// 인성검사 json
-			personalityTest: {
-			  status: 'ING',
-			  continueUrl: 'https://etesys.select-test.co.kr/user/page/test'
-			},
-			// 정성검사 json
-			aptitudeTest: { status: 'ING', continueUrl: '#' }
-		};
+const userInfo = {
+  isLogin: true,
+  memberType: 'PERSONAL',
 
-		document.addEventListener('DOMContentLoaded', () => {
-		console.log('모달 JS 실행됨');
-		  const { isLogin, memberType, personalityTest, aptitudeTest } = userInfo;
+  // 인성검사
+  personalityTest: {
+    status: 'ING', // ING | DONE | NONE
+    continueUrl: 'https://etesys.select-test.co.kr/user/page/test'
+  },
 
-		  // 1. 노출 조건
-		  if (!isLogin || memberType !== 'PERSONAL') return;
+  // 적성검사
+  /* aptitudeTest: {
+    status: 'ING',
+    continueUrl: '#'
+  } */
+};
 
-		  const hasPersonality = personalityTest.status === 'ING';
-		  const hasAptitude = aptitudeTest.status === 'ING';
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('검사 이어하기 모달 JS 실행');
 
-		  if (!hasPersonality && !hasAptitude) return;
+  const { isLogin, memberType, personalityTest, aptitudeTest } = userInfo;
 
-		  // 2. 버튼 구성
-		  const btnArea = document.getElementById('continueBtnArea');
-		  btnArea.innerHTML = '';
+  /* -----------------------------
+     1. 모달 노출 조건
+  ------------------------------ */
+  if (!isLogin) return;
+  if (memberType !== 'PERSONAL') return;
 
-		  if (hasPersonality) {
-			btnArea.appendChild(createContinueButton(
-			  '인성검사 이어하기',
-			  personalityTest.continueUrl
-			));
-		  }
+  const hasPersonality = personalityTest?.status === 'ING';
+  const hasAptitude    = aptitudeTest?.status === 'ING';
 
-		  if (hasAptitude) {
-			btnArea.appendChild(createContinueButton(
-			  '적성검사 이어하기',
-			  aptitudeTest.continueUrl
-			));
-		  }
+  if (!hasPersonality && !hasAptitude) return;
 
-		  // 3. 모달 노출
-		  openTestModal();
-		});
+  /* -----------------------------
+     2. 버튼 구성
+  ------------------------------ */
+  const btnArea = document.getElementById('continueBtnArea');
+  if (!btnArea) return;
 
-		function createContinueButton(text, url) {
-		  const btn = document.createElement('button');
-		  btn.className = 'btn primary';
-		  btn.textContent = text;
-		  btn.onclick = () => window.open(url, '_blank');
-		  return btn;
-		}
+  btnArea.innerHTML = '';
 
-		function openTestModal() {
-		  document.getElementById('testContinueModal')
-			.classList.remove('hidden');
-		}
+  if (hasPersonality) {
+    btnArea.appendChild(
+      createContinueButton(
+        '인성검사 이어하기',
+        personalityTest.continueUrl
+      )
+    );
+  }
+	/*
+  if (hasAptitude) {
+    btnArea.appendChild(
+      createContinueButton(
+        '적성검사 이어하기',
+        aptitudeTest.continueUrl
+      )
+    );
+  }
+  */
 
-		function closeTestModal() {
-		  document.getElementById('testContinueModal')
-			.classList.add('hidden');
-		}
+  /* -----------------------------
+     3. 모달 노출
+  ------------------------------ */
+  openTestModal();
+});
+
+/* =============================
+   버튼 생성
+============================= */
+function createContinueButton(text, url) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'aptjob-test-continue-modal__btn';
+  btn.textContent = text;
+
+  btn.addEventListener('click', () => {
+    window.open(url, '_blank');
+  });
+
+  return btn;
+}
+
+/* =============================
+   모달 제어
+============================= */
+function openTestModal() {
+  const modal = document.getElementById('testContinueModal');
+  if (!modal) return;
+
+  modal.classList.remove('is-hidden');
+}
+
+function closeTestModal() {
+  const modal = document.getElementById('testContinueModal');
+  if (!modal) return;
+
+  modal.classList.add('is-hidden');
+}
