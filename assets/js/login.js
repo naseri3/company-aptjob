@@ -1,6 +1,6 @@
 /** 구글 로그인 API */
 const GOOGLE_CLIENT_ID = "24355175704-aviumsce0orbnutandgjjsruphqca8g5.apps.googleusercontent.com";
-const REDIRECT_URI = "https://aptjob.netlify.app/login.html";
+const REDIRECT_URI = "https://portfolio-aptjob.netlify.app/subpage/login.html";
 
 const GOOGLE_AUTH_URL =
     "https://accounts.google.com/o/oauth2/v2/auth" +
@@ -27,7 +27,7 @@ if (authCode) {
 document.addEventListener("DOMContentLoaded", function () {
   var naver_id_login = new naver_id_login(
     "hLO6jennO8FmeKMz2ntZ",
-    "https://aptjob.netlify.app/login.html"
+    "https://portfolio-aptjob.netlify.app/subpage/login.html"
   );
 
   var state = naver_id_login.getUniqState();
@@ -36,10 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
   naver_id_login.setPopup();
   naver_id_login.init_naver_id_login();
 });
-var naver_id_login = new naver_id_login("hLO6jennO8FmeKMz2ntZ", "https://aptjob.netlify.app/login.html");
+var naver_id_login = new naver_id_login("hLO6jennO8FmeKMz2ntZ", "https://portfolio-aptjob.netlify.app/subpage/login.html");
         var state = naver_id_login.getUniqState();
         naver_id_login.setButton("white", 2,40);
-        naver_id_login.setDomain("https://aptjob.netlify.app");
+        naver_id_login.setDomain("https://portfolio-aptjob.netlify.app");
         naver_id_login.setState(state);
         naver_id_login.setPopup();
         naver_id_login.init_naver_id_login();
@@ -48,7 +48,7 @@ var naver_id_login = new naver_id_login("hLO6jennO8FmeKMz2ntZ", "https://aptjob.
 /** 카카오 로그인 API */
 function loginWithKakao() {
     Kakao.Auth.authorize({
-      redirectUri: 'http://127.0.0.1:5501/login.html',  // 앱에 등록된 카카오 로그인에서 사용할 Redirect URI 입력
+      redirectUri: 'http://127.0.0.1:5500/subpage/login.html',  // 앱에 등록된 카카오 로그인에서 사용할 Redirect URI 입력
     });
   }
 
