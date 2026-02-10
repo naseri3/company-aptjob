@@ -1009,6 +1009,7 @@ td.company {
 }
 .process-img {
     text-align: center;
+    padding: 20px 0 10px;
 }
 .process-img img {
     height: 200px;
