@@ -8,25 +8,33 @@ const markers = [];
     - 같은 apartment 이름을 여러 건 넣으면 패널 하단 리스트로 묶여서 표시됨
 ===========================================================*/
 fetch("/assets/data/job-map-data.json")
-  .then(res => {
-    if (!res.ok) {
-      throw new Error("JSON 파일 못찾음");
-    }
-    return res.json();
-  })
-  .then(data => {
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("JSON 파일 못찾음");
+        }
+        return res.json();
+    })
+    .then(data => {
 
-    positions = data.map(job => ({
-      ...job,
-      latlng: new kakao.maps.LatLng(job.lat, job.lng)
-    }));
+        function parseDate(dateStr) {
+            const [yy, mm, dd] = dateStr.split("-");
+            return new Date(`20${yy}`, mm - 1, dd, 23, 59, 59);
+        }
 
-    initMapData();
+        const today = new Date();
 
-  })
-  .catch(err => {
-    console.error("JSON 로딩 실패:", err);
-  });
+        positions = data
+            .filter(job => parseDate(job.endDate) >= today)
+            .map(job => ({
+                ...job,
+                latlng: new kakao.maps.LatLng(job.lat, job.lng)
+            }));
+
+        initMapData();
+    })
+    .catch(err => {
+        console.error("JSON 로딩 실패:", err);
+    });
 
 
 /*==========================================================
@@ -180,7 +188,7 @@ function getLatestJob(jobs) {
 function getCategoryGroup(job) {
     if (["소장", "관리과장", "관리주임"].includes(job)) return "관리";
     if (["경리(회계)", "서무"].includes(job)) return "경리";
-    if (["기술과장", "시설과장", "시설기사","설비직(영선)", "기전직"].includes(job)) return "시설";
+    if (["기술과장", "시설과장", "시설기사", "설비직(영선)", "기전직"].includes(job)) return "시설";
     if (["전기과장", "전기기사", "전기직"].includes(job)) return "전기";
     if (["커뮤니티", "경비원", "미화원", "기타"].includes(job)) return "기타";
 }
