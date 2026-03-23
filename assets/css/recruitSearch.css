@@ -295,7 +295,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 15px;
 }
 
 /* 지역 버튼 */
@@ -489,6 +488,15 @@
   border-radius: 0 0 10px 10px;
 }
 
+.map-info__desc {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #595959;
+    margin: 5px 0 15px;
+}
+.map-info__desc strong {
+    color: #e53935;
+}
 /*========================================================
   지도 우측 슬라이드 패널
 ==========================================================*/
@@ -842,4 +850,11 @@
 }
 .map-job__row.is-active {
     background: #e8f0ff;
+}
+
+/* 공고가 없을 시 */
+.map-job__empty {
+    font-size: 18px;
+    text-align: center !important;
+    font-weight: 600;
 }

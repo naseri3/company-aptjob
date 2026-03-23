@@ -37,8 +37,8 @@
                         <span class="region-btn__arrow"></span>
                     </button>
                     <div class="location-search">
-                        <span>내 위치 :</span>
-                        <input type="text" placeholder="서울 중구 세종대로 110">
+                        <span>우리집 주소 :</span>
+                        <input type="text" id="homeAddressInput" placeholder="서울 중구 세종대로 110" readonly>
                         <button type="button" class="btn-move">이동</button>
                     </div>
                 </div>
@@ -63,11 +63,14 @@
                         <button type="button" class="btn-search">검색</button>
                     </div>
                 </div>
+                <p class="map-info__desc">
+                    * 우리집 주소와 근무지까지의 <strong>직선거리</strong>를 확인해보세요
+                </p>
             </div>
 
             <div id="MapArea">
                 <div id="mapAlert" class="map-alert">
-                    내 위치 기준 4km 이내 공고만 표시됩니다.
+                    지도는 시·군 단위까지만 확인하실 수 있습니다
                 </div>
                 <div id="map" class="mapView"></div>
 
@@ -204,9 +207,16 @@
 
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1aeb3e9a49e983e68615734accc31d91&libraries=services,clusterer,drawing"></script>
-    <script src="/assets/js/map/map_search.js"></script>
-    <script src="/assets/js/map/map_ui_layer.js"></script>
-    <script src="/assets/js/map/map_job_list.js"></script>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    
+    <script src="/assets/js/map-js/map-core.js"></script>
+    <script src="/assets/js/map-js/map-data.js"></script>
+    <script src="/assets/js/map-js/map-marker.js"></script>
+    <script src="/assets/js/map-js/map-panel.js"></script>
+    <script src="/assets/js/map-js/map-filter.js"></script>
+    <script src="/assets/js/map-js/map-search.js"></script>
+    <script src="/assets/js/map-js/map-job-list.js"></script>
 
     <script>
         (function () {
@@ -259,6 +269,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => { var a = document.getElementById("backToTop"); if (!a) return; window.addEventListener("scroll", () => { window.scrollY > 300 ? a.classList.add("show") : a.classList.remove("show") }), a.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }) }) });
     </script>
+    
 </body>
 
 </html>

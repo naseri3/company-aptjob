@@ -59,19 +59,35 @@ const MAX_LEVEL = 9;  // 최대 축소
 
 let isMaxAlertShown = false;
 
+let fixedCenter = map.getCenter();
+
+kakao.maps.event.addListener(map, 'zoom_start', function () {
+    fixedCenter = map.getCenter();
+});
+
 kakao.maps.event.addListener(map, 'zoom_changed', function () {
     let level = map.getLevel();
+
+    // 중심 고정
+    map.setCenter(fixedCenter);
 
     // 확대 제한
     if (level < MIN_LEVEL) {
         map.setLevel(MIN_LEVEL);
-        return;
     }
 
     // 축소 제한
     if (level > MAX_LEVEL) {
         map.setLevel(MAX_LEVEL);
-        level = MAX_LEVEL;
+
+        if (!isMaxAlertShown) {
+            showMapAlert();
+            isMaxAlertShown = true;
+
+            setTimeout(() => {
+                isMaxAlertShown = false;
+            }, 1200);
+        }
     }
 
     // ✅ 줌할 때마다 마커 크기 즉시 재적용
@@ -231,13 +247,16 @@ function getMarkerSize(level, active) {
 kakao.maps.event.addListener(map, 'zoom_changed', function () {
 
     let level = map.getLevel();
+    const center = map.getCenter();
 
     if (level < MIN_LEVEL) {
         map.setLevel(MIN_LEVEL);
+        map.setCenter(center);
     }
 
     if (level > MAX_LEVEL) {
         map.setLevel(MAX_LEVEL);
+        map.setCenter(center)
 
         // ✅ 중복 방지
         if (!isMaxAlertShown) {
