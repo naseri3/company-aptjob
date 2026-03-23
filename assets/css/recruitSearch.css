@@ -291,8 +291,6 @@
     border: 1px solid #eee;
     border-radius: 10px;
     position: relative;
-    border: 1px solid #eee;
-    border-radius: 10px;
     overflow: hidden;
     background: #fff;
 }
@@ -547,13 +545,6 @@
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
-}
-
-.job-panel__title {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    color: #222;
 }
 
 .job-panel__close {
