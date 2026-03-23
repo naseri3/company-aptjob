@@ -27,7 +27,12 @@
     <!-- main -->
     <main>
         <section id="subPage" class="recruit-search">
-            <h2>내 주변 공고</h2>
+            <h2 class="map-job-header">
+                <span class="map-job-header__title">내 주변 공고</span>
+                <span class="map-job-header__desc">
+                    * 우리집 주소와 근무지까지의 <strong>직선거리</strong>를 확인해보세요
+                </span>
+            </h2>
 
             <div class="map-search">
                 <!-- 상단 검색 바 -->
@@ -63,9 +68,6 @@
                         <button type="button" class="btn-search">검색</button>
                     </div>
                 </div>
-                <p class="map-info__desc">
-                    * 우리집 주소와 근무지까지의 <strong>직선거리</strong>를 확인해보세요
-                </p>
             </div>
 
             <div id="MapArea">
@@ -209,7 +211,7 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1aeb3e9a49e983e68615734accc31d91&libraries=services,clusterer,drawing"></script>
 
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    
+
     <script src="/assets/js/map-js/map-core.js"></script>
     <script src="/assets/js/map-js/map-data.js"></script>
     <script src="/assets/js/map-js/map-marker.js"></script>
@@ -269,7 +271,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => { var a = document.getElementById("backToTop"); if (!a) return; window.addEventListener("scroll", () => { window.scrollY > 300 ? a.classList.add("show") : a.classList.remove("show") }), a.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }) }) });
     </script>
-    
+
 </body>
 
 </html>

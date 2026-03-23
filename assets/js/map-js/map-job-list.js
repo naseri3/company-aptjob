@@ -85,6 +85,19 @@ function renderJobTable(jobs) {
     sortedJobs.forEach(job => {
         const tr = document.createElement("tr");
         tr.className = "map-job__row";
+        tr.onclick = function (e) {
+
+            if (e.target.closest(".map-job__cell--favorite")) return;
+            if (e.target.closest(".map-job__link")) return;
+
+            handleJobClick(
+                job.lat,
+                job.lng,
+                job.apartment,
+                job.jobTitle
+            );
+        };
+
         tr.dataset.lat = String(job.lat);
         tr.dataset.lng = String(job.lng);
         tr.dataset.apartment = job.apartment;
@@ -123,7 +136,7 @@ function renderJobTable(jobs) {
                 <a href="#"
                    class="btn btn-apply"
                    onclick="handleJobClick(${job.lat}, ${job.lng}, '${escapeJsString(job.apartment)}', '${escapeJsString(job.jobTitle)}'); return false;">
-                   상세보기
+                   지도 보기
                 </a>
             </td>
         `;

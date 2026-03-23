@@ -25,10 +25,14 @@ function createMarkerImage(category, active) {
 }
 
 function getMarkerSize(level, active) {
-    if (level <= 5) return active ? 50 : 40;
-    if (level <= 8) return active ? 40 : 30;
-    return active ? 30 : 25;
+
+    if (level <= 5) return active ? 52 : 40;
+    if (level <= 8) return active ? 45 : 32;
+
+    // 최소 줌
+    return active ? 40 : 26;
 }
+
 
 function createMarkers() {
     Object.keys(groupedPositions).forEach(key => {
