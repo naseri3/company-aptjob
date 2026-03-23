@@ -38,10 +38,9 @@ function syncListWithMapBounds() {
     const bounds = map.getBounds();
 
     let visibleJobs = positions.filter(job =>
-        bounds.contain(job.latlng) || bounds.contains(job.latlng)
+        bounds.contain(job.latlng)
     );
 
-    // 직무 필터 적용
     if (selectedJobs && selectedJobs.size > 0) {
         visibleJobs = visibleJobs.filter(job =>
             selectedJobs.has(job.jobType) ||
@@ -52,7 +51,6 @@ function syncListWithMapBounds() {
     renderJobTable(visibleJobs);
     updateJobCount(visibleJobs);
 }
-
 /* ==========================================================
     리스트 렌더링
 ========================================================== */
