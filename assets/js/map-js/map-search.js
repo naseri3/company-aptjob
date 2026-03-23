@@ -48,7 +48,7 @@ function initHomeAddress() {
     }
 
     homeInput.value = address;
-    moveToAddress(address);
+    moveToAddress(address, true);
 }
 
 
@@ -73,8 +73,9 @@ function openAddressSearch() {
 /*==========================================================
     지도 이동 + 마커 생성
 ===========================================================*/
-function moveToAddress(address) {
+function moveToAddress(address, initial = false) {
     geocoder.addressSearch(address, function (result, status) {
+
         if (status !== kakao.maps.services.Status.OK) {
             alert("주소를 찾을 수 없습니다.");
             return;
@@ -85,28 +86,21 @@ function moveToAddress(address) {
             result[0].x
         );
 
-        // 지도 이동
         map.panTo(coords);
-        map.setLevel(4);
 
-        // 기존 마커 제거
+        if (!initial) {
+            map.setLevel(4);
+        }
+
         if (homeMarker) {
             homeMarker.setMap(null);
         }
 
-        // 우리집 마커
         homeMarker = new kakao.maps.Marker({
             map,
-            position: coords,
-            image: new kakao.maps.MarkerImage(
-                "/assets/img/mapapidoc/map-marker.png",
-                new kakao.maps.Size(32, 32),
-                { offset: new kakao.maps.Point(16, 32) }
-            ),
-            zIndex: 9999
+            position: coords
         });
 
-        // 거리 계산 기준 좌표
         locPosition = coords;
     });
 }

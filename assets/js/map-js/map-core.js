@@ -6,7 +6,7 @@ const mapContainer = document.getElementById("map");
 
 const map = new kakao.maps.Map(mapContainer, {
     center: new kakao.maps.LatLng(37.5665, 126.9780),
-    level: 3
+    level: 8
 });
 
 map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT);
