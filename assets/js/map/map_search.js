@@ -7,6 +7,9 @@ const sidoList = document.getElementById("sidoList");
 const gugunList = document.getElementById("gugunList");
 const btnText = regionBtn.querySelector(".region-btn__text");
 
+
+const geocoder = new kakao.maps.services.Geocoder();
+
 // TODO: 추후 서버 데이터로 교체 예정
 const regionData = {
     서울: ["전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],
@@ -108,19 +111,39 @@ function selectGugun(target) {
 
 /* 검색 버튼 */
 document.querySelector(".btn-search").addEventListener("click", () => {
+
     const sido = document.querySelector("#sidoList .active span").textContent;
     const gugun = document.querySelector("#gugunList .active span").textContent;
 
-    // 텍스트 유지 (원하면 여기 커스터마이징 가능)
+    const address = gugun === "전체"
+        ? `${sido}`
+        : `${sido} ${gugun}`;
+
+    geocoder.addressSearch(address, function (result, status) {
+
+        if (status === kakao.maps.services.Status.OK) {
+
+            const coords = new kakao.maps.LatLng(
+                result[0].y,
+                result[0].x
+            );
+
+            map.setCenter(coords);
+
+            // 기획안 기준 1km 확대
+            map.setLevel(5);
+
+        } else {
+
+            alert("해당 지역을 찾을 수 없습니다.");
+
+        }
+    });
+
     btnText.textContent = "지역";
-
-    // ✅ 드롭다운만 닫기
     dropdown.classList.remove("active");
-
-    // ✅ 선택했으니까 버튼 active 유지
     regionBtn.classList.add("active");
 
-    console.log("검색:", sido, gugun);
 });
 
 /* 취소 */
