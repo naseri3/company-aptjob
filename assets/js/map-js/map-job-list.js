@@ -38,7 +38,7 @@ function syncListWithMapBounds() {
     const bounds = map.getBounds();
 
     let visibleJobs = positions.filter(job =>
-        bounds.contain(job.latlng)
+        bounds.contain(job.latlng) || bounds.contains(job.latlng)
     );
 
     // 직무 필터 적용

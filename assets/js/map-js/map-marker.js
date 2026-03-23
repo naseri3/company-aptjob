@@ -8,7 +8,7 @@ const markerMap = {
     경리: "/assets/img/mapapidoc/map-marker-2.png",
     시설: "/assets/img/mapapidoc/map-marker-3.png",
     전기: "/assets/img/mapapidoc/map-marker-4.png",
-    기타: "/assets/img/mapapidoc/map-marker-5.png"
+    기타직: "/assets/img/mapapidoc/map-marker-5.png"
 };
 
 function createMarkerImage(category, active) {
@@ -106,7 +106,8 @@ function updateMarkers() {
 
         marker.setPosition(대표.latlng);
         marker.category = category;
-        marker.setImage(createMarkerImage(category, false));
+        const isActive = marker === activeMarker;
+        marker.setImage(createMarkerImage(category, isActive));
         marker.setMap(map);
     });
 }
