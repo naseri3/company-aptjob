@@ -2,11 +2,16 @@
    MAP CORE
    지도 초기화 및 기본 설정
 ========================================================== */
+const DEFAULT_LEVEL = 8;
+const MIN_LEVEL = 3;
+const MAX_LEVEL = 9;
+
+
 const mapContainer = document.getElementById("map");
 
 const map = new kakao.maps.Map(mapContainer, {
     center: new kakao.maps.LatLng(37.5665, 126.9780),
-    level: 8
+    level: DEFAULT_LEVEL
 });
 
 map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT);
@@ -16,9 +21,6 @@ map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
 /* ==========================================================
    지도 줌 제한
 ========================================================== */
-const MIN_LEVEL = 3;
-const MAX_LEVEL = 9;
-
 let fixedCenter = map.getCenter();
 let isMaxAlertShown = false;
 

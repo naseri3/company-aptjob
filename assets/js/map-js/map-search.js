@@ -54,23 +54,6 @@ function initHomeAddress() {
 
 
 /*==========================================================
-    주소 검색창
-===========================================================*/
-homeInput.addEventListener("click", openAddressSearch);
-
-function openAddressSearch() {
-    new daum.Postcode({
-        oncomplete: function (data) {
-            const address = data.address;
-            homeInput.value = address;
-            localStorage.setItem("homeAddress", address);
-            moveToAddress(address);
-        }
-    }).open();
-}
-
-
-/*==========================================================
     지도 이동 + 마커 생성
 ===========================================================*/
 function moveToAddress(address, initial = false) {
@@ -87,10 +70,6 @@ function moveToAddress(address, initial = false) {
         );
 
         map.panTo(coords);
-
-        if (!initial) {
-            map.setLevel(4);
-        }
 
         if (homeMarker) {
             homeMarker.setMap(null);
@@ -257,6 +236,12 @@ document.querySelector(".btn-search").addEventListener("click", () => {
 
 
 /*==========================================================
+    주소 검색창
+===========================================================*/
+homeInput.addEventListener("click", openAddressSearch);
+
+
+/*==========================================================
     주소 검색 (우편번호 API)
 ===========================================================*/
 function openAddressSearch() {
@@ -270,16 +255,13 @@ function openAddressSearch() {
             } else {
                 address = data.jibunAddress;
             }
-            // input 입력
+
             homeInput.value = address;
-            // 저장
             localStorage.setItem("homeAddress", address);
-            // 지도 이동
             moveToAddress(address);
         }
     }).open();
 }
-
 
 
 /*==========================================================
