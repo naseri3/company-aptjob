@@ -107,3 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
     syncListWithMapBounds();
 
 });
+
+document.querySelector(".btn-cancel").addEventListener("click", () => {
+    dropdown.classList.remove("active");
+    regionBtn.classList.remove("active");
+});
