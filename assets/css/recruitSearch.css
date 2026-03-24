@@ -792,7 +792,7 @@
     display: grid;
     gap: 8px;
     margin-top: 10px;
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(10, 1fr);
 }
 
 .job-filter__btn {

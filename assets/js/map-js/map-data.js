@@ -64,8 +64,8 @@ function getLatestJob(jobs) {
 
 function getCategoryGroup(job) {
     if (["소장", "관리과장", "관리주임"].includes(job)) return "관리";
-    if (["경리(회계)", "서무"].includes(job)) return "경리";
-    if (["기술과장", "시설과장", "시설기사", "설비직(영선)", "기전직"].includes(job)) return "시설";
+    if (["경리(회계)", "서무직"].includes(job)) return "경리";
+    if (["기술과장", "시설과장", "시설기사", "설비직(영선)", "기전직", "조경기사"].includes(job)) return "시설";
     if (["전기과장", "전기기사", "전기직"].includes(job)) return "전기";
     if (["커뮤니티", "경비원", "미화원", "기타"].includes(job)) return "기타직";
     return "기타직";

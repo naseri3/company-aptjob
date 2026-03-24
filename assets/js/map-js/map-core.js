@@ -21,8 +21,8 @@ map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
 /* ==========================================================
    지도 줌 제한
 ========================================================== */
-let fixedCenter = map.getCenter();
 let isMaxAlertShown = false;
+let fixedCenter = map.getCenter();
 
 kakao.maps.event.addListener(map, "zoom_start", function () {
     fixedCenter = map.getCenter();
@@ -42,7 +42,7 @@ kakao.maps.event.addListener(map, "zoom_changed", function () {
         showMapAlert();
     }
 
-    markers.forEach(marker => {
+     markers.forEach(marker => {
         const isActive = marker === activeMarker;
         marker.setImage(createMarkerImage(marker.category, isActive));
     });

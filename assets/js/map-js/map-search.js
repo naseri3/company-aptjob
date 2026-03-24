@@ -69,6 +69,10 @@ function moveToAddress(address, initial = false) {
             result[0].x
         );
 
+        if (!initial) {
+            map.setLevel(7);            // 우리집 주소 input
+        }
+
         map.panTo(coords);
 
         if (homeMarker) {
@@ -224,7 +228,7 @@ document.querySelector(".btn-search").addEventListener("click", () => {
             );
 
             map.setCenter(coords);
-            map.setLevel(5);
+            map.setLevel(7);               // 지역 select
         } else {
             alert("해당 지역을 찾을 수 없습니다.");
         }
