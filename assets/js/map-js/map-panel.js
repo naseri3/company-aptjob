@@ -52,8 +52,8 @@ function renderSummary(job) {
                 </div>
             </div>
 
-            <button class="job-summary__btn"
-                onclick="goDetail('${job.apartment}')">
+           <button class="job-summary__btn"
+                onclick="goDetail('${job.r_seq}')">
                 공고 상세보기
             </button>
         </div>
