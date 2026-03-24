@@ -169,8 +169,8 @@ function focusMarker(lat, lng) {
     openPanel(target.groupKey);
 }
 
-function goDetail(apartment) {
-    location.href = `/corp_office_info.html?apt=${encodeURIComponent(apartment)}`;
+function goDetail(r_seq) {
+    location.href = `/subpage/recruit_detail.html?r_seq=${r_seq}`;
 }
 
 function closePanel() {
