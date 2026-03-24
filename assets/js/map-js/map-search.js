@@ -42,7 +42,7 @@ function initHomeAddress() {
 
     if (memberAddress) {
         address = memberAddress;
-    } 
+    }
     else if (cookieAddress) {
         address = cookieAddress;
     }
@@ -96,11 +96,20 @@ function moveToAddress(address, initial = false) {
             homeMarker.setMap(null);
         }
 
-        homeMarker = new kakao.maps.Marker({
-            map,
-            position: coords
-        });
+        const homeMarkerImage = new kakao.maps.MarkerImage(
+            "/assets/img/mapapidoc/map-marker.png",
+            new kakao.maps.Size(30, 30),
+            {
+                offset: new kakao.maps.Point(20, 40)
+            }
+        );
 
+        homeMarker = new kakao.maps.Marker({
+            map: map,
+            position: coords,
+            image: homeMarkerImage,
+            zIndex: 1000
+        });
         locPosition = coords;
     });
 }
