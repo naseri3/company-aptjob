@@ -5,6 +5,49 @@ let currentPanelJobs = [];
 let currentSelectedJob = null;
 let currentGroupKey = null;
 
+
+/* ==========================================================
+   FAVORITE
+========================================================== */
+const FAVORITE_KEY = "aptjob_favorites";
+function getFavorites() {
+    return JSON.parse(localStorage.getItem(FAVORITE_KEY) || "[]");
+}
+
+function saveFavorites(list) {
+    localStorage.setItem(FAVORITE_KEY, JSON.stringify(list));
+}
+
+function isFavorite(id) {
+    const favs = getFavorites();
+    return favs.includes(id);
+}
+
+function toggleFavorite(r_seq, el) {
+
+    // 로그인 체크 (임시)
+    // TODO: 로그인 상태 확인 후 즐겨찾기 사용 가능하도록 처리
+    // 현재는 userId 값으로 로그인 여부 판단
+    if(!userId){
+        alert("로그인 후 이용 가능합니다.");
+        location.href = "/subpage/login.html";
+        return;
+    }
+    
+
+    let favs = getFavorites();
+
+    if (favs.includes(r_seq)) {
+        favs = favs.filter(id => id !== r_seq);
+        el.classList.remove("is-active");
+    } else {
+        favs.push(r_seq);
+        el.classList.add("is-active");
+    }
+    saveFavorites(favs);
+}
+
+
 function renderSummary(job) {
     if (!job) return "";
 
@@ -19,7 +62,12 @@ function renderSummary(job) {
                 </div>
 
                 <div class="job-summary__info">
-                    <div class="job-summary__apartment">${job.apartment}</div>
+                    <div class="job-summary__apartment">${job.apartment}
+                        <span class="favorite-star ${isFavorite(job.r_seq) ? 'is-active' : ''}"
+                            onclick="toggleFavorite('${job.r_seq}', this)">
+                        ★
+                        </span>
+                    </div>
                     <div class="job-summary__title">${job.jobTitle}</div>
                     <div class="job-summary__period">
                         ${job.startDate} ~ ${job.endDate}
@@ -106,10 +154,10 @@ function openPanel(key) {
 
         <div class="job-panel__list">
             ${sorted.map((job, i) => {
-                const category = getCategoryGroup(job.jobType);
-                const icon = markerMap[category];
+        const category = getCategoryGroup(job.jobType);
+        const icon = markerMap[category];
 
-                return `
+        return `
                     <div class="job-panel__item ${i === 0 ? "is-active" : ""}"
                         onclick="selectJob(${i})">
                         <div class="job-panel__inner">
@@ -127,7 +175,7 @@ function openPanel(key) {
                         </div>
                     </div>
                 `;
-            }).join("")}
+    }).join("")}
         </div>
     `;
 }
@@ -190,6 +238,9 @@ kakao.maps.event.addListener(map, "click", function () {
 });
 
 function openKakaoMap(lat, lng, name) {
-    const url = `https://map.kakao.com/link/to/${encodeURIComponent(name)},${lat},${lng}`;
+    const startLat = locPosition.getLat();
+    const startLng = locPosition.getLng();
+
+    const url = `https://map.kakao.com/link/from/내위치,${startLat},${startLng}/to/${encodeURIComponent(name)},${lat},${lng}`;
     window.open(url, "_blank");
 }

@@ -102,9 +102,6 @@ function renderJobTable(jobs) {
         tr.dataset.lng = String(job.lng);
         tr.dataset.apartment = job.apartment;
         tr.innerHTML = `
-            <td class="job-item map-job__cell map-job__cell--favorite">
-                <span class="favorite-star">★</span>
-            </td>
             <td class="job-item map-job__cell map-job__cell--title">
                 <a class="title map-job__link"
                     onclick="handleJobClick(${job.lat}, ${job.lng}, '${escapeJsString(job.apartment)}', '${escapeJsString(job.jobTitle)}')">

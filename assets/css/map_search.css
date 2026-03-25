@@ -1,0 +1,613 @@
+
+/*========================================================
+    내 주변 공고
+==========================================================*/
+#MapArea {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* 검색 영역 */
+.map-search {
+    position: relative;
+    font-family: sans-serif;
+}
+
+/* 상단 */
+.map-job-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.map-job-header__desc {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #595959;
+    margin: 0 0 10px;
+    font-weight: 500;
+}
+.map-job-header__desc strong {
+    color: #e53935;
+}
+
+.map-search__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+
+/* 지역 버튼 */
+.region-btn {
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* 활성 상태 */
+.region-btn.active {
+    border-color: #333;
+    background: #f8f8f8;
+}
+
+/* 화살표 방향 변경 */
+.region-btn__arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #333; /* ▼ */
+}
+
+.region-btn.active .region-btn__arrow {
+    border-top: none;
+    border-bottom: 6px solid #333; /* ▲ */
+}
+
+/* 위치 검색 */
+.location-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.location-search input {
+    border: 1px solid #ccc;
+    padding: 6px;
+    width: 220px;
+    border-radius: 4px;
+}
+/* 입력된 주소 색 */
+.home-address {
+    color: #666;
+}
+
+/* placeholder 색 */
+.home-address::placeholder {
+    color: #888;
+}
+
+.btn-move {
+    background: #0055db;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* 드롭다운 */
+.region-dropdown {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 360px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    display: none;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.region-dropdown.active {
+    display: block;
+}
+
+/* 헤더 */
+.region-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #f5f6f8;
+    border-bottom: 1px solid #ddd;
+}
+
+.region-header .region-dropdown__col {
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+.region-dropdown__col:first-child {
+    border-right: 1px solid #ddd;
+}
+
+/* 바디 */
+.region-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* 리스트 */
+.region-list {
+    height: 220px;
+    overflow-y: auto;
+}
+
+.region-list:first-child {
+    border-right: 1px solid #eee;
+}
+
+.region-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* hover */
+.region-list li:hover {
+    background: #f3f7ff;
+}
+
+/* active */
+.region-list li.active {
+    background: #e8f0ff;
+    color: #0055db;
+    font-weight: 600;
+}
+
+/* 체크 */
+.check {
+    display: none;
+}
+
+.region-list li.active .check {
+    display: block;
+}
+
+/* 버튼 */
+.region-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+    background: #eee;
+    border: none;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100px;
+}
+
+.btn-search {
+    background: #0055db;
+    color: #fff;
+    border: none;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100px;
+}
+
+/*========================================================
+  내 주변 공고 - 지도 영역
+==========================================================*/
+
+.mapView {
+    width: 100%;
+    height: 460px;
+    border-radius: 10px 10px 0 0;
+}
+
+.mapView__job {
+    padding: 30px 20px 20px;
+    background-color: #fff;
+    border-top: 1px solid #f1f1f1;
+    border-radius: 0 0 10px 10px;
+}
+
+/* ========================================================
+  지도 우측 슬라이드 패널
+==========================================================*/
+.job-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 360px;
+    height: 100%;
+    background: #fff;
+    z-index: 20;
+    border-left: 1px solid #e9e9e9;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.08);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.job-panel.is-open {
+    transform: translateX(0);
+}
+
+/*========================================================
+  패널 헤더
+==========================================================*/
+.job-panel__header {
+    height: 56px;
+    padding: 0 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.job-panel__close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    font-size: 22px;
+    line-height: 1;
+    color: #555;
+    cursor: pointer;
+}
+
+/*========================================================
+  대표 공고
+==========================================================*/
+.job-summary {
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid #ececec;
+    flex-shrink: 0; /* 🔥 중요 */
+}
+
+.job-summary__header {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.job-summary__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.job-summary__icon img {
+    width: 42px;
+    margin-top: 7px;
+}
+
+.job-summary__apartment {
+    font-size: 15px;
+    font-weight: 700;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.job-summary__title {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #0055db;
+    margin-bottom: 8px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.job-summary__period {
+    font-size: 14px;
+    color: #444;
+}
+
+.job-summary__table {
+    border-top: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+    padding: 14px 0;
+    margin-bottom: 16px;
+}
+
+.job-summary__row {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 10px;
+    align-items: start;
+    margin-bottom: 10px;
+}
+
+.job-summary__row:last-child {
+    margin-bottom: 0;
+}
+
+.job-summary__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #9aa3b2;
+}
+
+.job-summary__value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.job-summary__value--pay {
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.job-summary__btn {
+    width: 100%;
+    height: 50px;
+    border: 0;
+    border-radius: 10px;
+    background: #0055db;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.job-summary__distance-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    color: #ff4d4f;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.btn-route {
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid #0055db;
+    background: #fff;
+    color: #0055db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-route:hover {
+    background: #0055db;
+    color: #fff;
+}
+
+/*========================================================
+  패널 하단 리스트
+==========================================================*/
+.job-summary__info {
+    width: 100%;
+}
+
+.job-panel__body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#jobSummaryWrap {
+    flex-shrink: 0;
+}
+
+.job-panel__list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 카드 */
+.job-panel__item {
+    display: block;
+    width: 100%;
+    padding: 16px 18px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.job-panel__item:hover {
+    background: #f3f8ff;
+}
+
+.job-panel__item.is-active {
+    background: #f3f8ff;
+}
+
+/* 내부 레이아웃 (아이콘 + 텍스트) */
+.job-panel__top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.job-panel__inner {
+    display: flex;
+}
+
+/* 아이콘 */
+.job-panel__icon img {
+    width: 36px;
+    height: 36px;
+}
+
+/* 텍스트 묶음 */
+.job-panel__content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 아파트명 */
+.job-panel__apartment {
+    font-size: 15px;
+    font-weight: 500;
+    color: #888;
+    margin-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 제목 (핵심 강조) */
+.job-panel__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #202020;
+    line-height: 1.4;
+    word-break: keep-all;
+    margin-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 기간 */
+.job-panel__period {
+    font-size: 13px;
+    color: #717171;
+    margin-left: 15px;
+    padding-top: 5px;
+}
+
+/*========================================================
+  직무 필터
+==========================================================*/
+.job-filter {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+    grid-template-columns: repeat(10, 1fr);
+}
+
+.job-filter__btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.job-filter__btn:hover,
+.job-filter__btn.is-active,
+.job-filter__btn.active {
+    background: #e9f2ff;
+    border-color: #0055db;
+    color: #0055db;
+}
+
+.job-filter__icon {
+    width: 18px;
+}
+
+/*========================================================
+  맵 줌 alert 값
+==========================================================*/
+.map-alert {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 12px 16px;
+    border-radius: 10px;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.map-alert.show {
+    opacity: 1;
+}
+
+/*========================================================
+  map job list section
+==========================================================*/
+.map-job__title span {
+    font-size: 16px;
+    background-color: #eef6ff;
+    color: #0055db;
+    padding: 5px 10px;
+    border-radius: 50px;
+}
+.map-job__cell--deadline {
+    color: #e53935;
+    font-weight: 600;
+}
+.map-job__cell--distance {
+    color: #e53935;
+    font-weight: 600;
+}
+.map-job__row.is-active {
+    background: #e8f0ff;
+}
+.map-job__row {
+    cursor: pointer;
+}
+
+.map-job__cell--favorite {
+    cursor: default;
+}
+
+/* 공고가 없을 시 */
+.map-job__empty {
+    font-size: 18px;
+    text-align: center !important;
+    font-weight: 600;
+}

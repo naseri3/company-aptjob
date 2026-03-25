@@ -9,6 +9,13 @@ const btnText = regionBtn.querySelector(".region-btn__text");
 
 const geocoder = new kakao.maps.services.Geocoder();
 
+/* ⭐ 전역 지역 데이터 */
+let regionData = {};
+
+
+/*==========================================================
+    지역 데이터 로딩
+===========================================================*/
 async function loadRegionData() {
     try {
         const res = await fetch("/assets/data/region-data.json");
@@ -17,7 +24,7 @@ async function loadRegionData() {
         }
         regionData = await res.json();
     } catch (err) {
-        console.error(err);
+        console.error("지역 데이터 오류 :", err);
     }
 }
 
@@ -37,20 +44,16 @@ let homeMarker = null;
 function initHomeAddress() {
     const memberAddress = window.memberAddress || null;
     const cookieAddress = localStorage.getItem("homeAddress");
-
     let address = "서울 중구 세종대로 110";
 
     if (memberAddress) {
         address = memberAddress;
-    }
-    else if (cookieAddress) {
+    } else if (cookieAddress) {
         address = cookieAddress;
     }
-
     homeInput.value = address;
     moveToAddress(address, true);
 }
-
 
 
 /*==========================================================
@@ -58,27 +61,22 @@ function initHomeAddress() {
 ===========================================================*/
 function moveToAddress(address, initial = false) {
     geocoder.addressSearch(address, function (result, status) {
-
         if (status !== kakao.maps.services.Status.OK) {
             alert("주소를 찾을 수 없습니다.");
             return;
         }
-
         const coords = new kakao.maps.LatLng(
             result[0].y,
             result[0].x
         );
-
         if (!initial) {
-            map.setLevel(7);            // 우리집 주소 input
+            map.setLevel(7);
         }
-
         map.panTo(coords);
 
         if (homeMarker) {
             homeMarker.setMap(null);
         }
-
         const homeMarkerImage = new kakao.maps.MarkerImage(
             "/assets/img/mapapidoc/map-marker.png",
             new kakao.maps.Size(30, 30),
@@ -86,7 +84,6 @@ function moveToAddress(address, initial = false) {
                 offset: new kakao.maps.Point(20, 40)
             }
         );
-
         homeMarker = new kakao.maps.Marker({
             map: map,
             position: coords,
@@ -101,15 +98,16 @@ function moveToAddress(address, initial = false) {
 /*==========================================================
     이동 버튼
 ===========================================================*/
-moveBtn.addEventListener("click", () => {
-    const address = homeInput.value.trim();
-
-    if (!address) {
-        alert("주소를 먼저 검색해주세요.");
-        return;
-    }
-    moveToAddress(address);
-});
+if (moveBtn) {
+    moveBtn.addEventListener("click", () => {
+        const address = homeInput.value.trim();
+        if (!address) {
+            alert("주소를 먼저 검색해주세요.");
+            return;
+        }
+        moveToAddress(address);
+    });
+}
 
 
 /*==========================================================
@@ -125,7 +123,6 @@ function toggleRegion() {
         dropdown.classList.add("active");
         regionBtn.classList.add("active");
     }
-
 }
 
 
@@ -135,6 +132,7 @@ function toggleRegion() {
 document.addEventListener("click", (e) => {
     if (!e.target.closest(".map-search")) {
         dropdown.classList.remove("active");
+        regionBtn.classList.remove("active");
     }
 });
 
@@ -157,7 +155,6 @@ function renderSido() {
         li.addEventListener("click", () => {
             selectSido(li, sido);
         });
-
         sidoList.appendChild(li);
     });
 }
@@ -168,24 +165,18 @@ function renderSido() {
 ===========================================================*/
 function renderGugun(sido) {
     gugunList.innerHTML = "";
-
     regionData[sido].forEach((gugun, index) => {
         const li = document.createElement("li");
         if (index === 0) li.classList.add("active");
-
         li.innerHTML = `
             <span>${gugun}</span>
             <span class="check">✔</span>
         `;
-
         li.addEventListener("click", () => {
             selectGugun(li);
         });
-
         gugunList.appendChild(li);
-
     });
-
 }
 
 
@@ -205,16 +196,9 @@ function selectSido(target, sido) {
 function selectGugun(target) {
     [...gugunList.children].forEach(li => li.classList.remove("active"));
     target.classList.add("active");
-}
-
-
-/*==========================================================
-    지역 검색 버튼
-===========================================================*/
-document.querySelector(".btn-search").addEventListener("click", () => {
 
     const sido = document.querySelector("#sidoList .active span").textContent;
-    const gugun = document.querySelector("#gugunList .active span").textContent;
+    const gugun = target.querySelector("span").textContent;
 
     const address = gugun === "전체"
         ? `${sido}`
@@ -228,21 +212,29 @@ document.querySelector(".btn-search").addEventListener("click", () => {
             );
 
             map.setCenter(coords);
-            map.setLevel(7);               // 지역 select
-        } else {
-            alert("해당 지역을 찾을 수 없습니다.");
+            map.setLevel(7);
+
+            /* ⭐ 지도 이동 후 리스트 갱신 */
+            if (typeof syncListWithMapBounds === "function") {
+                syncListWithMapBounds();
+            }
         }
     });
 
-    btnText.textContent = "지역";
+    /* 버튼 텍스트 변경 */
+    btnText.textContent = address;
+    /* 드롭다운 닫기 */
     dropdown.classList.remove("active");
-});
+    regionBtn.classList.remove("active");
+}
 
 
 /*==========================================================
     주소 검색창
 ===========================================================*/
-homeInput.addEventListener("click", openAddressSearch);
+if (homeInput) {
+    homeInput.addEventListener("click", openAddressSearch);
+}
 
 
 /*==========================================================
@@ -250,10 +242,9 @@ homeInput.addEventListener("click", openAddressSearch);
 ===========================================================*/
 function openAddressSearch() {
     new daum.Postcode({
+
         oncomplete: function (data) {
             let address = '';
-
-            // 도로명 주소 우선
             if (data.roadAddress) {
                 address = data.roadAddress;
             } else {
@@ -266,7 +257,6 @@ function openAddressSearch() {
         }
     }).open();
 }
-
 
 /*==========================================================
     초기 실행
